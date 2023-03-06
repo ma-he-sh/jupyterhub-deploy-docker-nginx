@@ -1,4 +1,5 @@
 secrets/
 userlist
+certs
 .DS_Store
 __pycache__/

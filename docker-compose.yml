@@ -5,6 +5,22 @@
 version: "3"
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/default.conf:/tmp/default.template
+      - ./certs:/etc/certs
+    depends_on:
+      - hub
+    restart: always
+    entrypoint: /bin/bash -c 'cat /tmp/default.template | sed "s/\\\$$domain/${DOMAIN}/g" > /etc/nginx/conf.d/default.conf && nginx -g "daemon off;"'
+    networks:
+      - jupyterhub-network
+  
   hub:
     build:
       context: .
